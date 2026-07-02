@@ -8,8 +8,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 find_package(Torch REQUIRED)
 find_package(Boost COMPONENTS system thread iostreams)
-find_package(ale REQUIRED)
-find_package(OpenCV REQUIRED)
+# ALE/OpenCV are Atari-only; this is an Othello build (Atari excluded in environment/CMakeLists.txt).
+find_package(ale QUIET)
+find_package(OpenCV QUIET)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -25,7 +26,8 @@ add_subdirectory(minizero/actor)
 add_subdirectory(minizero/config)
 add_subdirectory(minizero/console)
 add_subdirectory(minizero/environment)
-add_subdirectory(minizero/learner)
+# learner = training-only pybind11 module (minizero_py); not needed for the eval/self-play engine.
+# add_subdirectory(minizero/learner)
 add_subdirectory(minizero/network)
 add_subdirectory(minizero/utils)
 add_subdirectory(minizero/zero)

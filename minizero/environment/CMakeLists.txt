@@ -1,4 +1,9 @@
 file(GLOB_RECURSE SRCS *.cpp)
+# Atari needs ALE+OpenCV; board-game builds on a host without them exclude the Atari sources.
+# Engine/MCTS/network/zero + all board games stay unmodified real MiniZero.
+if(NOT GAME_TYPE STREQUAL "ATARI")
+    list(FILTER SRCS EXCLUDE REGEX "/atari/")
+endif()
 
 add_library(environment ${SRCS})
 target_include_directories(
@@ -32,6 +37,7 @@ target_link_libraries(
     environment
     config
     utils
-    ale::ale-lib
-    ${OpenCV_LIBS}
 )
+if(GAME_TYPE STREQUAL "ATARI")
+    target_link_libraries(environment ale::ale-lib ${OpenCV_LIBS})
+endif()

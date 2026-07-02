@@ -3,8 +3,10 @@
 #include "color_message.h"
 #include "console.h"
 #include "git_info.h"
-#include "obs_recover.h"
+#if ATARI
+#include "obs_recover.h" // atari-only observation tools
 #include "obs_remover.h"
+#endif
 #include "ostream_redirector.h"
 #include "random.h"
 #include "zero_server.h"
@@ -196,9 +198,13 @@ void ModeHandler::runRemoveObs()
     std::string obs_file_path;
     std::cin >> obs_file_path;
 
+#if ATARI
     minizero::env::atari::ObsRemover ob;
     ob.initialize();
     ob.run(obs_file_path);
+#else
+    std::cout << "Currently, only support remove observation for atari games" << std::endl;
+#endif
 }
 
 void ModeHandler::runRecoverObs()
